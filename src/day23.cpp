@@ -415,7 +415,7 @@ int play(const Map& graph, int max_idx, const State& init, bool verbose = false)
         {0, estimate(init, max_idx == 1 ? START_G1 : START_G2, max_idx), init}
     };
 
-    while(!q.empty())
+    for(; !q.empty(); q.pop_front())
     {
         auto& [cost, ecost, s] = q.front();
         if(ecost < best)
@@ -437,16 +437,13 @@ int play(const Map& graph, int max_idx, const State& init, bool verbose = false)
                 else
                 {
                     auto newq = branches(graph, max_idx, s, cost, best);
-                    q.pop_front();
-                    q.splice(q.begin(), newq);
-                    q.sort([](auto const& i1, auto const& i2){
-                        return -get<1>(i1) < -get<1>(i2);
+                    newq.sort([](auto const& i1, auto const& i2){
+                        return get<1>(i1) < get<1>(i2);
                     });
-                    continue;
+                    q.splice(next(q.begin()), newq);
                 }
             }
         }
-        q.pop_front();
     }
     return best;
 }

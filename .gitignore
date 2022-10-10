@@ -1,0 +1,6 @@
+*.bak
+CMakeCache.txt
+CMakeFiles/
+Makefile
+aoc2021
+cmake_install.cmake
